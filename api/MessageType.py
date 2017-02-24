@@ -129,7 +129,7 @@ class media(base_message):
         self.__MediaId = None
 
     def __import_tree(self, serialized_xml):
-        self.__MediaId = int(self.__xml.find('MediaId').text)
+        self.__MediaId = self.__xml.find('MediaId').text
 
     def __create_empty_tree(self):
         ElementTree.SubElement(self.__xml, 'MediaId')
@@ -141,7 +141,7 @@ class media(base_message):
     @media_id.setter
     def media_id(self, id):
         self.__MediaId = id
-        self.__set_text('MediaId', str(id))
+        self.__set_text('MediaId', id)
 
 
 class image(media):
