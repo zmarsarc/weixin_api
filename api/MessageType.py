@@ -69,7 +69,7 @@ class base_message(object):
         msg_type = self._xml.find('MsgType')
         if msg_type is None:
             msg_type = ElementTree.SubElement(self._xml, 'MsgType')
-        msg_type.text = self
+        msg_type.text = str(self)
         return ElementTree.dump(self._xml)
 
     def __create_empty_tree(self):
@@ -82,6 +82,9 @@ class base_message(object):
 
     def __set_text(self, section, text):
         self._xml.find(section).text = text
+
+    def __str__(self):
+        return 'base_message'
 
 
 class text(base_message):
@@ -113,6 +116,9 @@ class text(base_message):
     def __create_empty_tree(self):
         ElementTree.SubElement(self._xml, 'Content')
 
+    def __str__(self):
+        return 'text'
+
 
 class media(base_message):
 
@@ -143,6 +149,9 @@ class media(base_message):
         self._MediaId = id
         self.__set_text('MediaId', id)
 
+    def __str__(self):
+        return 'media'
+
 
 class image(media):
 
@@ -172,6 +181,9 @@ class image(media):
     def picture_url(self, url):
         self._PicUrl = url
         self.__set_text('PicUrl', url)
+
+    def __str__(self):
+        return 'image'
 
 
 class voice(media):
@@ -215,6 +227,9 @@ class voice(media):
         self._Recognition = re
         self.__set_text('Recognition', re)
 
+    def __str__(self):
+        return 'voice'
+
 
 class video(media):
 
@@ -245,9 +260,14 @@ class video(media):
         self._ThumbMediaId = media_id
         self.__set_text('ThumbMediaId', media_id)
 
+        def __str__(self):
+            return 'video'
+
 
 class shortvideo(video):
-    pass
+
+    def __str__(self):
+        return 'shortvideo'
 
 
 class location(base_message):
@@ -315,6 +335,9 @@ class location(base_message):
         self._Lable = text
         self.__set_text('Label', text)
 
+    def __str__(self):
+        return 'location'
+
 
 class link(base_message):
 
@@ -368,3 +391,7 @@ class link(base_message):
     def url(self, url):
         self._Url = url
         self.__set_text('Url', url)
+
+    def __str__(self):
+        return 'link'
+
