@@ -16,61 +16,61 @@ class base_message(object):
             self.__create_empty_tree()
 
     def __import_tree(self, serialized_xml):
-        self.__xml = ElementTree.fromstring(serialized_xml)
-        self.__ToUserName = self.__xml.find('ToUserName').text
-        self.__FromUserName = self.__xml.find('FromUserName').text
-        self.__CreateTime = int(self.__xml.find('CreateTime').text)
-        self.__MsgId = int(self.__xml.find('MsgId').text)
+        self._xml = ElementTree.fromstring(serialized_xml)
+        self._ToUserName = self._xml.find('ToUserName').text
+        self._FromUserName = self._xml.find('FromUserName').text
+        self._CreateTime = int(self._xml.find('CreateTime').text)
+        self._MsgId = int(self._xml.find('MsgId').text)
 
     def __setup_filed(self):
-        self.__xml = None
-        self.__ToUserName = None
-        self.__FromUserName = None
-        self.__CreateTime = None
-        self.__MsgId = None
+        self._xml = None
+        self._ToUserName = None
+        self._FromUserName = None
+        self._CreateTime = None
+        self._MsgId = None
 
     @property
     def to_user_name(self):
-        return self.__ToUserName
+        return self._ToUserName
 
     @to_user_name.setter
     def to_user_name(self, name):
-        self.__ToUserName = name
+        self._ToUserName = name
         self.__set_text('ToUserName', name)
 
     @property
     def from_user_name(self):
-        return self.__FromUserName
+        return self._FromUserName
 
     @from_user_name.setter
     def from_user_name(self, name):
-        self.__FromUserName = name
+        self._FromUserName = name
         self.__set_text('FromUserName', name)
 
     @property
     def create_time(self):
-        return self.__CreateTime
+        return self._CreateTime
 
     @create_time.setter
     def create_time(self, time):
-        self.__CreateTime = time
+        self._CreateTime = time
         self.__set_text('CreateTime', str(time))
 
     @property
     def msg_id(self):
-        return self.__MsgId
+        return self._MsgId
 
     @msg_id.setter
     def msg_id(self, package_id):
-        self.__MsgId = package_id
+        self._MsgId = package_id
         self.__set_text('MsgId', str(package_id))
 
     def dump(self):
-        msg_type = self.__xml.find('MsgType')
+        msg_type = self._xml.find('MsgType')
         if msg_type is None:
-            msg_type = ElementTree.SubElement(self.__xml, 'MsgType')
-        msg_type.text = str(self.__class__)
-        return ElementTree.dump(self.__xml)
+            msg_type = ElementTree.SubElement(self._xml, 'MsgType')
+        msg_type.text = self
+        return ElementTree.dump(self._xml)
 
     def __create_empty_tree(self):
         root = ElementTree.Element('xml')
@@ -78,10 +78,10 @@ class base_message(object):
         ElementTree.SubElement(root, 'FromUserName')
         ElementTree.SubElement(root, 'CreateTime')
         ElementTree.SubElement(root, 'MsgId')
-        self.__xml = root
+        self._xml = root
 
     def __set_text(self, section, text):
-        self.__xml.find(section).text = text
+        self._xml.find(section).text = text
 
 
 class text(base_message):
@@ -97,21 +97,21 @@ class text(base_message):
 
     @property
     def content(self):
-        return self.__Content
+        return self._Content
 
     @content.setter
     def content(self, text):
-        self.__Content = text
+        self._Content = text
         self.__set_text('Content', text)
 
     def __setup_filed(self):
-        self.__Content = None
+        self._Content = None
 
     def __import_tree(self, serialized_xml):
-        self.__Content = self.__xml.find('Content').text
+        self._Content = self._xml.find('Content').text
 
     def __create_empty_tree(self):
-        ElementTree.SubElement(self.__xml, 'Content')
+        ElementTree.SubElement(self._xml, 'Content')
 
 
 class media(base_message):
@@ -126,21 +126,21 @@ class media(base_message):
             self.__create_empty_tree()
 
     def __setup_filed(self):
-        self.__MediaId = None
+        self._MediaId = None
 
     def __import_tree(self, serialized_xml):
-        self.__MediaId = self.__xml.find('MediaId').text
+        self._MediaId = self._xml.find('MediaId').text
 
     def __create_empty_tree(self):
-        ElementTree.SubElement(self.__xml, 'MediaId')
+        ElementTree.SubElement(self._xml, 'MediaId')
 
     @property
     def media_id(self):
-        return self.__MediaId
+        return self._MediaId
 
     @media_id.setter
     def media_id(self, id):
-        self.__MediaId = id
+        self._MediaId = id
         self.__set_text('MediaId', id)
 
 
@@ -156,21 +156,21 @@ class image(media):
             self.__create_empty_tree()
 
     def __setup_filed(self):
-        self.__PicUrl = None
+        self._PicUrl = None
 
     def __import_tree(self, serialized_xml):
-        self.__PicUrl = self.__xml.find('PicUrl').text
+        self._PicUrl = self._xml.find('PicUrl').text
 
     def __create_empty_tree(self):
-        ElementTree.SubElement(self.__xml, 'PicUrl')
+        ElementTree.SubElement(self._xml, 'PicUrl')
 
     @property
     def picture_url(self):
-        return self.__PicUrl
+        return self._PicUrl
 
     @picture_url.setter
     def picture_url(self, url):
-        self.__PicUrl = url
+        self._PicUrl = url
         self.__set_text('PicUrl', url)
 
 
@@ -186,33 +186,33 @@ class voice(media):
             self.__create_empty_tree()
 
     def __setup_filed(self):
-        self.__Format = None
-        self.__Recognition = None
+        self._Format = None
+        self._Recognition = None
 
     def __import_tree(self, serialized_xml):
-        self.__Format = self.__xml.find('Format').text
-        self.__Recognition = self.__xml.find('Recognition').text
+        self._Format = self._xml.find('Format').text
+        self._Recognition = self._xml.find('Recognition').text
 
     def __create_empty_tree(self):
-        ElementTree.SubElement(self.__xml, 'Format')
-        ElementTree.SubElement(self.__xml, 'Recognition')
+        ElementTree.SubElement(self._xml, 'Format')
+        ElementTree.SubElement(self._xml, 'Recognition')
 
     @property
     def format(self):
-        return self.__Format
+        return self._Format
 
     @format.setter
     def format(self, ft):
-        self.__Format = ft
+        self._Format = ft
         self.__set_text('Format', ft)
 
     @property
     def recognition(self):
-        return self.__Recognition
+        return self._Recognition
 
     @recognition.setter
     def recognition(self, re):
-        self.__Recognition = re
+        self._Recognition = re
         self.__set_text('Recognition', re)
 
 
@@ -228,21 +228,21 @@ class video(media):
             self.__create_empty_tree()
 
     def __setup_filed(self):
-        self.__ThumbMediaId = None
+        self._ThumbMediaId = None
 
     def __import_tree(self, serialized_xml):
-        self.__ThumbMediaId = self.__xml.find('ThumbMediaId').text
+        self._ThumbMediaId = self._xml.find('ThumbMediaId').text
 
     def __create_empty_tree(self):
-        ElementTree.SubElement(self.__xml, 'ThumbMediaId')
+        ElementTree.SubElement(self._xml, 'ThumbMediaId')
 
     @property
     def thumb(self):
-        return self.__ThumbMediaId
+        return self._ThumbMediaId
 
     @thumb.setter
     def thumb(self, media_id):
-        self.__ThumbMediaId = media_id
+        self._ThumbMediaId = media_id
         self.__set_text('ThumbMediaId', media_id)
 
 
@@ -262,57 +262,57 @@ class location(base_message):
             self.__create_empty_tree()
 
     def __setup_filed(self):
-        self.__Location_X = None
-        self.__Location_Y = None
-        self.__Scale = None
-        self.__Lable = None
+        self._Location_X = None
+        self._Location_Y = None
+        self._Scale = None
+        self._Lable = None
 
     def __import_tree(self, serialized_xml):
-        self.__Location_X = float(self.__xml.find('Location_X').text)
-        self.__Location_Y = float(self.__xml.find('Location_Y').text)
-        self.__Scale = float(self.__xml.find('Scale').text)
-        self.__Lable = self.__xml.find('Label').text
+        self._Location_X = float(self._xml.find('Location_X').text)
+        self._Location_Y = float(self._xml.find('Location_Y').text)
+        self._Scale = float(self._xml.find('Scale').text)
+        self._Lable = self._xml.find('Label').text
 
     def __create_empty_tree(self):
-        ElementTree.SubElement(self.__xml, 'Location_X')
-        ElementTree.SubElement(self.__xml, 'Location_Y')
-        ElementTree.SubElement(self.__xml, 'Scale')
-        ElementTree.SubElement(self.__xml, 'Label')
+        ElementTree.SubElement(self._xml, 'Location_X')
+        ElementTree.SubElement(self._xml, 'Location_Y')
+        ElementTree.SubElement(self._xml, 'Scale')
+        ElementTree.SubElement(self._xml, 'Label')
 
     @property
     def location_x(self):
-        return self.__Location_X
+        return self._Location_X
 
     @location_x.setter
     def location_x(self, pos):
-        self.__Location_X = pos
+        self._Location_X = pos
         self.__set_text('Location_X', str(pos))
 
     @property
     def location_y(self):
-        return self.__Location_Y
+        return self._Location_Y
 
     @location_y.setter
     def location_y(self, pos):
-        self.__Location_Y = pos
+        self._Location_Y = pos
         self.__set_text('Location_Y', str(pos))
 
     @property
     def scale(self):
-        return self.__Scale
+        return self._Scale
 
     @scale.setter
     def scale(self, scale):
-        self.__Scale = scale
+        self._Scale = scale
         self.__set_text('Scale', str(scale))
 
     @property
     def label(self):
-        return self.__Lable
+        return self._Lable
 
     @label.setter
     def label(self, text):
-        self.__Lable = text
+        self._Lable = text
         self.__set_text('Label', text)
 
 
@@ -328,43 +328,43 @@ class link(base_message):
             self.__create_empty_tree()
 
     def __setup_filed(self):
-        self.__Title = None
-        self.__Description = None
-        self.__Url = None
+        self._Title = None
+        self._Description = None
+        self._Url = None
 
     def __import_tree(self, serialized_xml):
-        self.__Title = self.__xml.find('Title').text
-        self.__Description = self.__xml.find('Description').text
-        self.__Url = self.__xml.find('Url').text
+        self._Title = self._xml.find('Title').text
+        self._Description = self._xml.find('Description').text
+        self._Url = self._xml.find('Url').text
 
     def __create_empty_tree(self):
-        ElementTree.SubElement(self.__xml, 'Title')
-        ElementTree.SubElement(self.__xml, 'Description')
-        ElementTree.SubElement(self.__xml, 'Url')
+        ElementTree.SubElement(self._xml, 'Title')
+        ElementTree.SubElement(self._xml, 'Description')
+        ElementTree.SubElement(self._xml, 'Url')
 
     @property
     def title(self):
-        return  self.__Title
+        return  self._Title
 
     @title.setter
     def title(self, text):
-        self.__Title = text
+        self._Title = text
         self.__set_text('Title', text)
 
     @property
     def description(self):
-        return self.__Description
+        return self._Description
 
     @description.setter
     def description(self, text):
-        self.__Description = text
+        self._Description = text
         self.__set_text('Description', text)
 
     @property
     def url(self):
-        return self.__Url
+        return self._Url
 
     @url.setter
     def url(self, url):
-        self.__Url = url
+        self._Url = url
         self.__set_text('Url', url)
