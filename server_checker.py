@@ -12,9 +12,8 @@ def login():
         if signature_checked(request.args):
             return request.args['echostr']
     elif request.method == 'POST':
-        info = MessageType.get_xml_info(request.data)
-        print(info)
-        return 'success'
+        info = MessageType.text(request.data)
+        return str(info.dump())
     abort(500)
 
 def signature_checked(args):

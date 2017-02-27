@@ -7,7 +7,10 @@ class base_message(object):
     """微信传递的 xml 数据包的基类"""
 
     def __init__(self, serialized_xml=None):
-        super(base_message, self).__init__()
+        try:
+            super(base_message, self).__init__(serialized_xml)
+        except TypeError:
+            pass
 
         self.__setup_filed()
         if serialized_xml is not None:
@@ -89,15 +92,6 @@ class base_message(object):
 
 class text(base_message):
 
-    def __init__(self, serialized_xml):
-        super(text, self).__init__(serialized_xml)
-
-        self.__setup_filed()
-        if serialized_xml is not None:
-            self.__import_tree(serialized_xml)
-        else:
-            self.__create_empty_tree()
-
     @property
     def content(self):
         return self._Content
@@ -121,15 +115,6 @@ class text(base_message):
 
 
 class media(base_message):
-
-    def __init__(self, serialized_xml):
-        super(media, self).__init__(serialized_xml)
-
-        self.__setup_filed()
-        if serialized_xml is not None:
-            self.__import_tree(serialized_xml)
-        else:
-            self.__create_empty_tree()
 
     def __setup_filed(self):
         self._MediaId = None
@@ -155,15 +140,6 @@ class media(base_message):
 
 class image(media):
 
-    def __init__(self, serialized_xml):
-        super(image, self).__init__(serialized_xml)
-
-        self.__setup_filed()
-        if serialized_xml is not None:
-            self.__import_tree(serialized_xml)
-        else:
-            self.__create_empty_tree()
-
     def __setup_filed(self):
         self._PicUrl = None
 
@@ -187,15 +163,6 @@ class image(media):
 
 
 class voice(media):
-
-    def __init__(self, serialized_xml):
-        super(voice, self).__init__(serialized_xml)
-
-        self.__setup_filed()
-        if serialized_xml is not None:
-            self.__import_tree(serialized_xml)
-        else:
-            self.__create_empty_tree()
 
     def __setup_filed(self):
         self._Format = None
@@ -233,15 +200,6 @@ class voice(media):
 
 class video(media):
 
-    def __init__(self, serialized_xml):
-        super(video, self).__init__(serialized_xml)
-
-        self.__setup_filed()
-        if serialized_xml is not None:
-            self.__import_tree(serialized_xml)
-        else:
-            self.__create_empty_tree()
-
     def __setup_filed(self):
         self._ThumbMediaId = None
 
@@ -271,15 +229,6 @@ class shortvideo(video):
 
 
 class location(base_message):
-
-    def __init__(self, serialized_xml):
-        super(location, self).__init__(serialized_xml)
-
-        self.__setup_filed()
-        if serialized_xml is not None:
-            self.__import_tree(serialized_xml)
-        else:
-            self.__create_empty_tree()
 
     def __setup_filed(self):
         self._Location_X = None
@@ -340,15 +289,6 @@ class location(base_message):
 
 
 class link(base_message):
-
-    def __init__(self, serialized_xml=None):
-        super(link, self).__init__()
-
-        self.__setup_filed()
-        if serialized_xml is not None:
-            self.__import_tree(serialized_xml)
-        else:
-            self.__create_empty_tree()
 
     def __setup_filed(self):
         self._Title = None
