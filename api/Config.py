@@ -7,7 +7,7 @@ class basic_configer(object):
     config_file_path = 'config.cfg'
 
     def __int__(self):
-        super(configer, self).__int__()
+        super(basic_configer, self).__int__()
 
     def get(self, option, default=None):
         raise NotImplemented(__name__ + self.__class__ + 'not implemented')
