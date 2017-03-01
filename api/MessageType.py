@@ -19,6 +19,7 @@ class base_message(object):
             self.__create_empty_tree()
 
     def __import_tree(self, serialized_xml):
+        # 若 xml 序列串中缺乏必要的 token，将抛出 AttributeError
         self._xml = ElementTree.fromstring(serialized_xml)
         self._ToUserName = self._xml.find('ToUserName').text
         self._FromUserName = self._xml.find('FromUserName').text
@@ -73,7 +74,7 @@ class base_message(object):
         if msg_type is None:
             msg_type = ElementTree.SubElement(self._xml, 'MsgType')
         msg_type.text = str(self)
-        return ElementTree.dump(self._xml)
+        return ElementTree.tostring(self._xml, encoding='utf-8')
 
     def __create_empty_tree(self):
         root = ElementTree.Element('xml')
@@ -91,6 +92,18 @@ class base_message(object):
 
 
 class text(base_message):
+
+    def __init__(self, serialized_xml=None):
+        try:
+            super(text, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
 
     @property
     def content(self):
@@ -116,6 +129,18 @@ class text(base_message):
 
 class media(base_message):
 
+    def __init__(self, serialized_xml=None):
+        try:
+            super(media, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
+
     def __setup_filed(self):
         self._MediaId = None
 
@@ -140,6 +165,18 @@ class media(base_message):
 
 class image(media):
 
+    def __init__(self, serialized_xml=None):
+        try:
+            super(image, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
+
     def __setup_filed(self):
         self._PicUrl = None
 
@@ -163,6 +200,18 @@ class image(media):
 
 
 class voice(media):
+
+    def __init__(self, serialized_xml=None):
+        try:
+            super(voice, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
 
     def __setup_filed(self):
         self._Format = None
@@ -200,6 +249,18 @@ class voice(media):
 
 class video(media):
 
+    def __init__(self, serialized_xml=None):
+        try:
+            super(video, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
+
     def __setup_filed(self):
         self._ThumbMediaId = None
 
@@ -224,11 +285,35 @@ class video(media):
 
 class shortvideo(video):
 
+    def __init__(self, serialized_xml=None):
+        try:
+            super(shortvideo, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
+
     def __str__(self):
         return 'shortvideo'
 
 
 class location(base_message):
+
+    def __init__(self, serialized_xml=None):
+        try:
+            super(location, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
 
     def __setup_filed(self):
         self._Location_X = None
@@ -289,6 +374,18 @@ class location(base_message):
 
 
 class link(base_message):
+
+    def __init__(self, serialized_xml=None):
+        try:
+            super(link, self).__init__(serialized_xml)
+        except TypeError:
+            pass
+
+        self.__setup_filed()
+        if serialized_xml is not None:
+            self.__import_tree(serialized_xml)
+        else:
+            self.__create_empty_tree()
 
     def __setup_filed(self):
         self._Title = None
