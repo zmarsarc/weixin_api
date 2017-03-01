@@ -63,3 +63,15 @@ class app(basic_configer):
 
     def _define_section(self):
         return 'App'
+
+
+class server(basic_configer):
+
+    def _define_section(self):
+        return 'Server'
+
+
+class token(basic_configer):
+
+    def _define_section(self):
+        return 'Token'

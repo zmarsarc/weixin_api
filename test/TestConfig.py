@@ -37,6 +37,12 @@ class TestBasicConfiger(unittest.TestCase):
             self.configer.xxx = 'test'
         self.assertRaises(AttributeError, testfunc)
 
+    def test_add(self):
+        value = 'aaa'
+        self.configer.add('foo', value)
+        self.assertEqual(value, self.configer.foo)
+        self.assertEqual(value, self.configer.get('foo'))
+
     def tearDown(self):
         self.sample.close()
         os.remove(self.sample.name)
