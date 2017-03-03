@@ -10,15 +10,21 @@ class token(object):
     def __init__(self, config):
         self._config = config  # 保存获取 token 所需的配置信息，并且将 token 回写。
 
-        self.value = config.token
+        self.__value = config.token
         self.update = config.update
         self.ttl = config.ttl
 
-        if int(time.time()) - self.update >= self.ttl:
+        if time.time() - self.update >= self.ttl:
             self.refresh()
 
+    @property
+    def value(self):
+        if time.time() - self.update >= self.ttl:
+            self.refresh()
+        return self.__value
+
     def refresh(self):
-        self.value, self.ttl = self._get_token()
+        self.__value, self.ttl = self._get_token()
         self.update = int(time.time())
         self._set_config()
 

@@ -5,7 +5,6 @@ from multiprocessing import Process
 from SampleServer import app
 from api import Access
 import time
-import threading
 
 
 def start_server():
@@ -25,7 +24,6 @@ class TestAccess(unittest.TestCase):
 
     def setUp(self):
         self.server = Process(target=start_server)
-        self.server.daemon = True
         self.server.start()
 
     def test_get_token_cache(self):
@@ -36,6 +34,14 @@ class TestAccess(unittest.TestCase):
         config = self.config()
         config.update = 0
         tk = Access.token(config)
+        self.assertEqual('ACCESS_TOKEN', tk.value)
+
+    def test_token_auto_update(self):
+        config = self.config()
+        config.ttl = 1
+        tk = Access.token(config)
+        self.assertEqual('ACCESS_TOKEN_CACHE', tk.value)
+        time.sleep(1)
         self.assertEqual('ACCESS_TOKEN', tk.value)
 
     def tearDown(self):
