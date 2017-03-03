@@ -35,4 +35,7 @@ def is_params_valid(params):
     except KeyError:
         return False
 
-app.run(port=12345)
+
+if __name__ == '__main__':
+    app.run(port=12345, debug=True)
+
