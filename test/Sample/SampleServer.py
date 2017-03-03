@@ -20,7 +20,11 @@ def token():
             'expires_in': 7200
         }
         return json.JSONEncoder().encode(response)
-    return abort(500)
+    error = {
+        'errcode': 12345,
+        'errmsg': 'error'
+    }
+    return json.JSONEncoder().encode(error)
 
 
 def is_params_valid(params):
