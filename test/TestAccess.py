@@ -5,6 +5,7 @@ from multiprocessing import Process
 from SampleServer import app
 from api import Access
 import time
+import threading
 
 
 def start_server():
@@ -15,15 +16,16 @@ def start_server():
 class TestAccess(unittest.TestCase):
 
     class config:
-        api = '127.0.0.1:12345/cgi-bin/token'
+        api = 'http://127.0.0.1:12345/cgi-bin/token'
         token = 'ACCESS_TOKEN_CACHE'
         ttl = 7200
         update = int(time.time())
         id = 'zmarsarc'
-        secret = '12345'
+        secret = '123456'
 
     def setUp(self):
         self.server = Process(target=start_server)
+        self.server.daemon = True
         self.server.start()
 
     def test_get_token_cache(self):
