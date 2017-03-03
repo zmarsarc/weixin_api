@@ -44,6 +44,9 @@ class TestAccess(unittest.TestCase):
         time.sleep(1)
         self.assertEqual('ACCESS_TOKEN', tk.value)
 
+    def test_token_singleton(self):
+        self.assertEqual(Access.token(self.config), Access.token(self.config))
+
     def tearDown(self):
         self.server.terminate()
 

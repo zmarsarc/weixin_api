@@ -5,6 +5,19 @@ import json
 import time
 
 
+def singleton(cls):
+    class wapped_class(cls):
+        _instance = None
+        
+        def __new__(cls, *args, **kwargs):
+            if wapped_class._instance is None:
+                wapped_class._instance = super(wapped_class, cls).__new__(cls, *args, **kwargs)
+            return wapped_class._instance
+
+    return wapped_class
+
+
+@singleton
 class token(object):
 
     def __init__(self, config):
@@ -37,4 +50,6 @@ class token(object):
         return (response['access_token'], response['expires_in'])
 
     def _set_config(self):
-       pass
+        self._config.token = self.__value
+        self._config.ttl = self.ttl
+        self._config.update = self.update
