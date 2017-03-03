@@ -21,7 +21,7 @@ class token(object):
 
     def _get_token(self):
         params = {'grant_type': 'client_credential',
-                  'appid': self._config.appid,
+                  'appid': self._config.id,
                   'secret': self._config.secret}
         response = requests.get(self._config.token_api, params=params)
         response = json.loads(response.content)
