@@ -432,3 +432,23 @@ class link(base_message):
     def __str__(self):
         return 'link'
 
+
+def auto(xml):
+
+    tree = ElementTree.fromstring(xml)
+    t = tree.find('MsgType').text
+    if t == 'text':
+        return text(xml)
+    if t == 'image':
+        return image(xml)
+    if t == 'voice':
+        return voice(xml)
+    if t == 'video':
+        return video(xml)
+    if t == 'shortvideo':
+        return shortvideo
+    if t == 'location':
+        return location(xml)
+    if t == 'link':
+        return link(xml)
+    raise AttributeError

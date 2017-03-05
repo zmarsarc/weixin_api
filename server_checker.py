@@ -12,7 +12,7 @@ def login():
         if signature_checked(request.args):
             return request.args['echostr']
     elif request.method == 'POST':
-        info = MessageType.text(request.data)
+        info = MessageType.auto(request.data)
         info.from_user_name, info.to_user_name = info.to_user_name, info.from_user_name
         return str(info.dump())
     abort(500)
