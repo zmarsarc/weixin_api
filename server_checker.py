@@ -12,10 +12,30 @@ def login():
         if signature_checked(request.args):
             return request.args['echostr']
     elif request.method == 'POST':
-        info = MessageType.text(request.data)
+        meg_typ = get_meg_type(request.data)
+        info = meg_typ(request.data)
         info.from_user_name, info.to_user_name = info.to_user_name, info.from_user_name
         return str(info.dump())
     abort(500)
+
+def get_meg_type(data):
+    from xml.etree.ElementTree import ElementTree
+    tree = ElementTree(data)
+    t = tree.find('MsgType')
+    if t == 'test':
+        return MessageType.text
+    if t == 'image':
+        return MessageType.image
+    if t == 'voice':
+        return MessageType.voice
+    if t == 'video':
+        return MessageType.video
+    if t == 'shortvideo':
+        return MessageType.shortvideo
+    if t == 'location':
+        return MessageType.location
+    if t == 'link':
+        return MessageType.link
 
 def signature_checked(args):
     sorted_args = sorted([token, args['timestamp'], args['nonce']])
