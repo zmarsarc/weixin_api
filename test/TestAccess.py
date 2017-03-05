@@ -36,14 +36,6 @@ class TestAccess(unittest.TestCase):
         tk = Access.token(config)
         self.assertEqual('ACCESS_TOKEN', tk.value)
 
-    def test_token_auto_update(self):
-        config = self.config()
-        config.ttl = 1
-        tk = Access.token(config)
-        self.assertEqual('ACCESS_TOKEN_CACHE', tk.value)
-        time.sleep(1)
-        self.assertEqual('ACCESS_TOKEN', tk.value)
-
     def test_token_singleton(self):
         self.assertEqual(Access.token(self.config), Access.token(self.config))
 
