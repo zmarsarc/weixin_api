@@ -20,7 +20,7 @@ def login():
 
 def get_meg_type(data):
     from xml.etree.ElementTree import ElementTree
-    tree = ElementTree(data)
+    tree = ElementTree(data).text
     t = tree.find('MsgType')
     if t == 'test':
         return MessageType.text
