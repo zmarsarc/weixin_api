@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 token = 'zmarsarc'
 
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -16,6 +17,7 @@ def login():
         info.from_user_name, info.to_user_name = info.to_user_name, info.from_user_name
         return str(info.dump())
     abort(500)
+
 
 def signature_checked(args):
     sorted_args = sorted([token, args['timestamp'], args['nonce']])
