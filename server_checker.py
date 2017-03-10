@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, url_for
+from flask import Flask, request, abort, render_template
 from hashlib import sha1
 from api import MessageType
 
@@ -31,7 +31,7 @@ def admin_login():
         else:
             return 'deny'
     if request.method == 'GET':
-        return url_for('static', filename='admin_login.html')
+        return render_template('admin_login.html')
 
 if __name__ == '__main__':
     app.run(port=8000)
