@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://lib.sinaapp.com/js/jquery/3.1.0/jquery-3.1.0.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>login</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <form action="/admin" method="post">
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Username" class="form-control">
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                    <input type="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
