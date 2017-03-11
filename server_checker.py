@@ -35,5 +35,10 @@ def admin_login():
     if request.method == 'GET':
         return render_template('admin_login.html')
 
+
+@app.route('/admin/api/<name>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def process_request(name):
+    return name
+
 if __name__ == '__main__':
     app.run(port=8000)
