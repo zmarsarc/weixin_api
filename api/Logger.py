@@ -7,7 +7,7 @@ class Logger(object):
     __isInit = False
 
     def __init__(self):
-        filename = 'log/weixin.log'
+        filename = './log/weixin.log'
         level = logging.INFO
         format = '%(asctime)s #%(levelname)s: %(message)s'
         logging.basicConfig(filename=filename, level=level, format=format, filemode='w+')
