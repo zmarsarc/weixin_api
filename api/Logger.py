@@ -8,12 +8,13 @@ class Logger(object):
 
     def __init__(self):
         filename = 'log/weixin.log'
-        level = logging.DEBUG
+        level = logging.INFO
         format = '%(asctime)s #%(levelname)s: %(message)s'
-        logging.basicConfig(filename=filename, level=level, format=format)
+        logging.basicConfig(filename=filename, level=level, format=format, filemode='w+')
         self.__isInit = True
 
-    def get_logger(self):
-        if not self.__isInit:
-            self.__init__()
+    @staticmethod
+    def get_logger():
+        if not Logger.__isInit:
+            Logger().__init__()
         return logging

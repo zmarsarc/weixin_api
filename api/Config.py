@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from ConfigParser import ConfigParser, NoSectionError, NoOptionError
-
+from .Logger import Logger
 
 class basic_configer(object):
 
@@ -49,6 +49,7 @@ class basic_configer(object):
 
     def _write_config_file(self):
         with open(self.config_file, 'w') as fp:
+            Logger.get_logger().info("write config file %s in %s", self.config_file, self.__class__)
             self._configer.write(fp)
 
     def __setattr__(self, key, value):
