@@ -1,9 +1,27 @@
 # -*- coding: utf-8 -*-
-from ConfigParser import ConfigParser, NoSectionError, NoOptionError
+from ConfigParser import ConfigParser, NoOptionError
+from abc import abstractmethod, ABCMeta
+
 from .Logger import Logger
 
 
-class basic_configer(object):
+class AbstractConfig(object):
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def get(self, option, default):
+        pass
+
+    @abstractmethod
+    def set(self, option, value):
+        pass
+
+    @abstractmethod
+    def add(self, option, value):
+        pass
+
+
+class basic_configer(AbstractConfig):
 
     def __init__(self, filename):
         try:
@@ -42,7 +60,10 @@ class basic_configer(object):
         return {name: value for (name, value) in self._configer.items(self._section)}
 
     def _open_config_file(self):
-        fp = open(self.config_file, 'r')  # 如果找不到配置文件，将会抛出 IOError
+        try:
+            fp = open(self.config_file, 'r')  # 如果找不到配置文件，将会抛出 IOError
+        except IOError:
+            Logger.get_logger().warn('config file \"%s\" not exist', self.config_file)
         fp.close()
         configer = ConfigParser()
         configer.read(self.config_file)
@@ -50,7 +71,7 @@ class basic_configer(object):
 
     def _write_config_file(self):
         with open(self.config_file, 'w') as fp:
-            Logger.get_logger().info("write config file %s in %s", self.config_file, self.__class__)
+            Logger.get_logger().info("write config file \"%s\" in %s", self.config_file, self.__class__)
             self._configer.write(fp)
 
     def __setattr__(self, key, value):
