@@ -25,8 +25,7 @@ def login():
 def admin_login():
     if request.method == 'POST':
         if request.form['username'] == 'admin' and request.form['password'] == '123456':
-            configer = Config.token('./data/config.cfg')
-            return Access.token(configer).value
+            return 'success'
         else:
             return 'deny'
     if request.method == 'GET':
