@@ -1,9 +1,8 @@
 from flask import Flask, request, abort, render_template
-from hashlib import sha1
-from api import MessageType
 from api import Access
 from api import Config
-
+from api import MessageType
+from api.Utilties import signature_checked
 
 app = Flask(__name__)
 
@@ -20,12 +19,6 @@ def login():
         info.from_user_name, info.to_user_name = info.to_user_name, info.from_user_name
         return str(info.dump())
     abort(500)
-
-
-def signature_checked(args):
-    sorted_args = sorted([token, args['timestamp'], args['nonce']])
-    local_signature = sha1(''.join(sorted_args)).hexdigest()
-    return args['signature'] == local_signature
 
 
 @app.route('/admin', methods=['GET', 'POST'])
