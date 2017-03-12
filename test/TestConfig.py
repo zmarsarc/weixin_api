@@ -8,7 +8,7 @@ from ConfigParser import NoOptionError
 
 class TestBasicConfiger(unittest.TestCase):
 
-    class subclass(Config.basic_configer):
+    class subclass(Config.FileConfig):
         def _define_section(self):
             return 'test'
 
@@ -19,10 +19,10 @@ class TestBasicConfiger(unittest.TestCase):
         self.configer = self.subclass(self.sample.name)
 
     def test_open_file(self):
-        self.assertRaises(IOError, Config.basic_configer, 'config.cfg')
+        self.assertRaises(IOError, Config.FileConfig, 'config.cfg')
 
     def test_undefined_section(self):
-        self.assertRaises(NotImplementedError, Config.basic_configer, self.sample.name)
+        self.assertRaises(NotImplementedError, Config.FileConfig, self.sample.name)
 
     def test_get(self):
         self.assertEqual(None, self.configer.get('name', None))

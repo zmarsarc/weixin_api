@@ -21,13 +21,13 @@ class AbstractConfig(object):
         pass
 
 
-class basic_configer(AbstractConfig):
+class FileConfig(AbstractConfig):
 
     def __init__(self, filename):
         try:
-            super(basic_configer, self).__init__(filename)
+            super(FileConfig, self).__init__(filename)
         except TypeError:
-            super(basic_configer, self).__init__()
+            super(FileConfig, self).__init__()
 
         self.config_file = filename
         self._configer = self._open_config_file()
@@ -82,19 +82,19 @@ class basic_configer(AbstractConfig):
         self.__dict__[key] = value
 
 
-class app(basic_configer):
+class app(FileConfig):
 
     def _define_section(self):
         return 'App'
 
 
-class server(basic_configer):
+class server(FileConfig):
 
     def _define_section(self):
         return 'Server'
 
 
-class token(basic_configer):
+class token(FileConfig):
 
     def _define_section(self):
         return 'Token'
