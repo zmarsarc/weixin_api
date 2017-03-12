@@ -32,7 +32,7 @@ def signature_checked(args):
 def admin_login():
     if request.method == 'POST':
         if request.form['username'] == 'admin' and request.form['password'] == '123456':
-            configer = Config.token('data/config.cfg')
+            configer = Config.token('./data/config.cfg')
             return Access.token(configer).value
         else:
             return 'deny'
