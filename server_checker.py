@@ -1,6 +1,9 @@
 from flask import Flask, request, abort, render_template
 from hashlib import sha1
 from api import MessageType
+from api import Access
+from api import Config
+
 
 app = Flask(__name__)
 
@@ -29,7 +32,8 @@ def signature_checked(args):
 def admin_login():
     if request.method == 'POST':
         if request.form['username'] == 'admin' and request.form['password'] == '123456':
-            return 'success'
+            configer = Config.token('data/config.cfg')
+            return Access.token(configer).value
         else:
             return 'deny'
     if request.method == 'GET':

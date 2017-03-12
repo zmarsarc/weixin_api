@@ -2,6 +2,7 @@
 from ConfigParser import ConfigParser, NoSectionError, NoOptionError
 from .Logger import Logger
 
+
 class basic_configer(object):
 
     def __init__(self, filename):
