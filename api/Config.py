@@ -2,6 +2,7 @@
 from abc import abstractmethod, ABCMeta
 from Utilties import Signleton
 from Logger import Logger
+import json
 import os
 import sys
 
@@ -38,7 +39,7 @@ class AbstractConfig(object):
         :param option: str -> 指定配置项名称
         :param group: （可选）指定配置项所在的组
         :param default: （可选）未能成功读取配置时返回的值
-        :return: str
+        :return: Any
         """
         pass
 
@@ -86,42 +87,40 @@ class FileConfig(AbstractConfig):
         super(FileConfig, self).__init__()
 
         self.logger = Logger.get_logger()
-        self.filename = filename if filename is not None else 'default.wxcfg'
         try:
-            self.fp = self.__open_config_file(self.filename)
+            fp = self.__open_config_file(filename if filename is not None else 'default.wxcfg')
+            self.config_file = fp.name
         except NoValidConfigFileError:
             self.logger.fatal('no any config files available')
+            fp.close()
             sys.exit(1)
         else:
-            self.logger.info('open config file %s', self.filename)
+            self.logger.info('open config file %s', filename)
+
+        self.configs = json.load(fp, encoding='utf-8')
+        fp.close()
 
     def add(self, option, value, group=None):
-        super(FileConfig, self).add(option, value, group)
+        self.configs[option] = value
+        self.logger.info("set config option : {0} to {1}".format(option, value))
+        self.__write_config_file()
+        return 1
 
     def get(self, option, group=None, default=None):
-        super(FileConfig, self).get(option, group, default)
+        return self.configs.get(option, default)
 
     def set(self, option, value, group=None):
-        super(FileConfig, self).set(option, value, group)
+        if not self.configs.has_key(option):
+            raise OptionNotExistError(option, self.config_file)
+        return self.add(option, value, group)
 
     def __open_config_file(self, filename):
         try:
-            return self.__open_user_config(filename)
-        except ConfigFileNotExistError:
-            return self.__open_default_config()
+            return self.__try_open_config(filename)
+        except NoValidConfigFileError:
+            return self.__try_open_config('default.wxcfg')
 
-    def __open_default_config(self):
-        paths = self.__generate_conf_file_path('default.wxcfg')
-        for f in paths:
-            try:
-                return self.__open_file_with_read(f)
-            except ConfigFileNotExistError:
-                pass
-        else:
-            self.logger.warning('can not find any default config files')
-            raise NoValidConfigFileError()
-
-    def __open_user_config(self, filename):
+    def __try_open_config(self, filename):
         paths = self.__generate_conf_file_path(filename)
         for f in paths:
             try:
@@ -129,8 +128,8 @@ class FileConfig(AbstractConfig):
             except ConfigFileNotExistError:
                 pass
         else:
-            self.logger.warning('can not find any user config files')
-            raise ConfigFileNotExistError(filename)
+            self.logger.warning('can not find any config file: %s', filename)
+            raise NoValidConfigFileError()
 
     def __open_file_with_read(self, filepath):
         try:
@@ -150,3 +149,8 @@ class FileConfig(AbstractConfig):
         # TODO: 事实上这种假设是错误的
         paths.extend([os.path.join(os.getcwd(), p) for p in ('conf', 'api')])
         return [os.path.join(p, filename) for p in paths]
+
+    def __write_config_file(self):
+        with open(self.config_file, 'w') as fp:
+            fp.write(json.JSONEncoder().encode(self.configs))
+        self.logger.info("write configs to file %s", self.config_file)
