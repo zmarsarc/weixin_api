@@ -3,17 +3,17 @@
 import unittest
 import os
 from api import Config
-from ConfigParser import NoOptionError
 
 
 class TestFileConfiger(unittest.TestCase):
 
     def setUp(self):
-        self.configer = Config.FileConfig()
+        os.environ['WX_CONF_PATH'] = os.path.join(os.getcwd(), 'test\\Sample')
+        self.configer = Config.FileConfig("sample.wxcfg")
 
     def test_get(self):
         self.assertEqual(None, self.configer.get('name', default=None))
-        self.assertEqual('123', self.configer.get('id'))
+        self.assertEqual(u"223", self.configer.get('id'))
 
     def test_set(self):
         self.assertRaises(Config.OptionNotExistError, self.configer.set, option='name', value='ttt')
@@ -23,3 +23,6 @@ class TestFileConfiger(unittest.TestCase):
         value = 'aaa'
         self.configer.add('foo', value)
         self.assertEqual(value, self.configer.get('foo'))
+
+    def tearDown(self):
+        os.unsetenv('WX_CONF_PATH')
