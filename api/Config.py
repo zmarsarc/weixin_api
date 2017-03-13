@@ -92,7 +92,6 @@ class FileConfig(AbstractConfig):
             self.config_file = fp.name
         except NoValidConfigFileError:
             self.logger.fatal('no any config files available')
-            fp.close()
             sys.exit(1)
         else:
             self.logger.info('open config file %s', filename)
