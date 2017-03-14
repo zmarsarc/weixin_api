@@ -1,0 +1,7 @@
+{
+  "base": "https://api.weixin.qq.com/cgi-bin",
+  "token": {
+    "api": "/token",
+    "args": [ "grant_type", "appid" , "secret" ]
+  }
+}
