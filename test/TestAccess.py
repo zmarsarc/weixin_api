@@ -5,6 +5,8 @@ from multiprocessing import Process
 from SampleServer import app
 from api import Access
 import time
+import os
+from api import Config
 
 
 def start_server():
@@ -14,30 +16,28 @@ def start_server():
 
 class TestAccess(unittest.TestCase):
 
-    class config:
-        api = 'http://127.0.0.1:12345/cgi-bin/token'
-        token = 'ACCESS_TOKEN_CACHE'
-        ttl = 7200
-        update = int(time.time())
-        id = 'zmarsarc'
-        secret = '123456'
-
     def setUp(self):
         self.server = Process(target=start_server)
         self.server.start()
+        os.environ['WX_CONF_PATH'] = os.path.join(os.getcwd(), 'test\\Sample')
+        self.config = Config.FileConfig('testserver.wxcfg')
+        self.config.add('token', {'value': 'ACCESS_TOKEN_CACHE', 'ttl': '7200', 'update': str(int(time.time()))})
+        self.config.add('appid', 'zmarsarc')
+        self.config.add('secret', '123456')
 
     def test_get_token_cache(self):
-        tk = Access.token(self.config)
-        self.assertEqual(self.config.token, tk.value)
+        tk = Access.Token(self.config)
+        self.assertEqual(self.config.get('token')['value'], tk.value)
 
     def test_get_token_new(self):
-        config = self.config()
-        config.update = 0
-        tk = Access.token(config)
+        token = self.config.get('token')
+        token['update'] = 0
+        self.config.set('token', token)
+        tk = Access.Token(self.config)
         self.assertEqual('ACCESS_TOKEN', tk.value)
 
     def test_token_singleton(self):
-        self.assertEqual(Access.token(self.config), Access.token(self.config))
+        self.assertEqual(Access.Token(self.config), Access.Token(self.config))
 
     def tearDown(self):
         self.server.terminate()
