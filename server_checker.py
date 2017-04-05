@@ -24,7 +24,7 @@ def login():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        if request.form['username'] == 'admin' and request.form['password'] == '123456':
+        if request.form['UserName'] == 'admin' and request.form['Password'] == '123456':
             return 'success'
         else:
             return 'deny'
