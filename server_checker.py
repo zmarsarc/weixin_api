@@ -14,7 +14,8 @@ token = 'zmarsarc'
 def connect_database():
     if not os.path.exists('userinfo.db'):
         ret = sqlite3.connect('userinfo.db')
-        ret.executescript('schema.sql')
+        with open('schema.sql') as fp:
+            ret.executescript(fp.read())
     else:
         ret = sqlite3.connect('userinfo.db')
     return ret
