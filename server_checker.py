@@ -54,7 +54,7 @@ def process_request(name):
 def password_check(username, password, db):
     result = db.execute("SELECT password FROM password WHERE username IS ?;", (username,))
     fetch = result.fetchone()
-    return fetch == password
+    return fetch[0] == password
 
 
 if __name__ == '__main__':
