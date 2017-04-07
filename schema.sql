@@ -1,0 +1,7 @@
+CREATE TABLE password (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+username TEXT NOT NULL,
+password TEXT NOT NULL
+);
+INSERT INTO password VALUES (0, "admin", "123456");
+COMMIT;

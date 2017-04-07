@@ -3,10 +3,23 @@ from api import Access
 from api import Config
 from api import MessageType
 from api.Utilties import signature_checked
+import sqlite3
+import os
 
 app = Flask(__name__)
 
 token = 'zmarsarc'
+
+
+def connect_database():
+    if not os.path.exists('userinfo.db'):
+        ret = sqlite3.connect('userinfo.db')
+        ret.executescript('schema.sql')
+    else:
+        ret = sqlite3.connect('userinfo.db')
+    return ret
+
+db = connect_database()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -24,7 +37,7 @@ def login():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        if request.form['UserName'] == 'admin' and request.form['Password'] == '123456':
+        if password_check(request.form['UserName'], request.form['Password'], db):
             return 'success'
         else:
             return 'deny'
@@ -38,3 +51,9 @@ def process_request(name):
 
 if __name__ == '__main__':
     app.run(port=8000)
+
+
+def password_check(username, password, db):
+    result = db.execute("SELECT password FROM password WHERE username IS ?;", (username,))
+    fetch = result.fetchone()
+    return fetch == password
